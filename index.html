@@ -1,191 +1,33 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aktienanalyse und Prognose</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        .card {
-            margin-bottom: 20px;
-        }
-        .chart-container {
-            width: 100%;
-            height: 400px;
-        }
-        #loading {
-            display: none;
-            text-align: center;
-        }
-        .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #007bff;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
+    <title>Aktienanalyse</title>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <h3>Aktienanalyse und Prognose</h3>
-            </div>
-            <div class="card-body">
-                <form id="stock-form">
-                    <div class="form-group">
-                        <label for="stock-symbol">Aktienkürzel:</label>
-                        <input type="text" class="form-control" id="stock-symbol" placeholder="Geben Sie das Aktienkürzel ein">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Analyse starten</button>
-                </form>
-            </div>
-        </div>
-        
-        <div id="loading">
-            <div class="loading-spinner"></div>
-            <p>Analyse wird durchgeführt, bitte warten...</p>
-        </div>
-        
-        <div id="analysis-results" style="display: none;">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Analyseergebnisse</h3>
-                </div>
-                <div class="card-body">
-                    <h5 id="company-name"></h5>
-                    <p id="company-sector"></p>
-                    <p id="company-website"></p>
-                    <p id="company-description"></p>
-                </div>
-            </div>
+    <h1>Aktienanalyse</h1>
+    <form id="stockForm">
+        <label for="stockSymbol">Aktiensymbol:</label>
+        <input type="text" id="stockSymbol" name="stockSymbol" required>
+        <button type="button" onclick="runAnalysis()">Analysieren</button>
+    </form>
+    <div id="result"></div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h3>Durchschnittliche tägliche Rendite und Volatilität</h3>
-                </div>
-                <div class="card-body">
-                    <p id="average-return"></p>
-                    <p id="volatility"></p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3>Schlusskurse und gleitende Durchschnitte</h3>
-                </div>
-                <div class="card-body">
-                    <img id="price-chart" src="" alt="Schlusskurse und gleitende Durchschnitte" class="img-fluid">
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3>Handelsvolumen im Zeitverlauf</h3>
-                </div>
-                <div class="card-body">
-                    <img id="volume-chart" src="" alt="Handelsvolumen im Zeitverlauf" class="img-fluid">
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3>Nachrichtenanalyse</h3>
-                </div>
-                <div class="card-body">
-                    <p id="news-sentiment"></p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3>Trendprognose</h3>
-                </div>
-                <div class="card-body">
-                    <p id="trend-direction"></p>
-                    <p id="trend-description"></p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3>Zusammenfassung</h3>
-                </div>
-                <div class="card-body">
-                    <p id="summary"></p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <h3>Schlussfolgerung</h3>
-                </div>
-                <div class="card-body">
-                    <p id="conclusion"></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('#stock-form').on('submit', function (e) {
-                e.preventDefault();
-                var stockSymbol = $('#stock-symbol').val();
+        function runAnalysis() {
+            var symbol = document.getElementById('stockSymbol').value;
+            var baseUrl = 'https://colab.research.google.com/drive/1yhpF6zy1O_YQ8mQ1Y10Wu8h7O1yrwH_2#scrollTo=LQbEuACY2QiZ'; // Hier Ihre Colab-Notebook-ID einfügen
+            var notebookUrl = baseUrl + '?stock_name=' + symbol; // Parameter hinzufügen
 
-                $('#loading').show();
-                $('#analysis-results').hide();
-
-                // Backend-API-Aufruf, um die Aktienanalyse durchzuführen
-                $.ajax({
-                    url: '/analyze_stock',  // Hier muss der richtige Endpunkt für die Analyse angegeben werden
-                    method: 'POST',
-                    data: { stock: stockSymbol },
-                    success: function (data) {
-                        $('#loading').hide();
-
-                        // Daten aus der API-Antwort verwenden, um das Frontend zu aktualisieren
-                        $('#company-name').text(data.company_name);
-                        $('#company-sector').text('Sektor: ' + data.company_sector);
-                        $('#company-website').html('Website: <a href="' + data.company_website + '">' + data.company_website + '</a>');
-                        $('#company-description').text(data.company_description);
-                        $('#average-return').text('Durchschnittliche tägliche Rendite: ' + data.average_return + '%');
-                        $('#volatility').text('Volatilität: ' + data.volatility + '%');
-                        $('#price-chart').attr('src', data.price_chart_url);
-                        $('#volume-chart').attr('src', data.volume_chart_url);
-                        $('#news-sentiment').text('Nachrichtenstimmung: ' + data.news_sentiment);
-                        $('#trend-direction').text('Trendrichtung: ' + data.trend_direction);
-                        $('#trend-description').text(data.trend_description);
-                        $('#summary').text(data.summary);
-                        $('#conclusion').text(data.conclusion);
-
-                        $('#analysis-results').show();
-                    },
-                    error: function (error) {
-                        $('#loading').hide();
-                        alert('Fehler bei der Analyse. Bitte versuchen Sie es erneut.');
-                    }
-                });
-            });
-        });
+            var iframe = document.createElement('iframe');
+            iframe.src = notebookUrl;
+            iframe.style.width = '100%';
+            iframe.style.height = '500px'; // Passen Sie die Höhe an Ihre Anforderungen an
+            iframe.style.border = 'none';
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('result').appendChild(iframe);
+        }
     </script>
 </body>
 </html>
