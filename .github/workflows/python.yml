@@ -2,25 +2,27 @@ name: Python application
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main  # Ändern Sie dies entsprechend dem Namen Ihrer Hauptbranch
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-    - name: Set up Python 3.8
+    - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        python-version: '3.x'  # Ändern Sie dies entsprechend der Python-Version, die Sie verwenden möchten
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        pip install -r requirements.txt  # Stellen Sie sicher, dass Ihre Anforderungen in einer Datei "requirements.txt" definiert sind
 
-    - name: Run analysis script
-      run: python stock_analysis_script.py
+    - name: Run analysis
+      run: python stock_analysis_script.py  # Hier den Befehl einfügen, um Ihr Python-Skript auszuführen
+
+    # Weitere Schritte hier hinzufügen, je nach Ihren Anforderungen
