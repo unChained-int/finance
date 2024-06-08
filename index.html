@@ -17,16 +17,8 @@
     <script>
         function runAnalysis() {
             var symbol = document.getElementById('stockSymbol').value;
-            var baseUrl = 'https://colab.research.google.com/drive/1yhpF6zy1O_YQ8mQ1Y10Wu8h7O1yrwH_2#scrollTo=LQbEuACY2QiZ'; // Hier Ihre Colab-Notebook-ID einfügen
-            var notebookUrl = baseUrl + '?stock_name=' + symbol; // Parameter hinzufügen
-
-            var iframe = document.createElement('iframe');
-            iframe.src = notebookUrl;
-            iframe.style.width = '100%';
-            iframe.style.height = '500px'; // Passen Sie die Höhe an Ihre Anforderungen an
-            iframe.style.border = 'none';
-            document.getElementById('result').innerHTML = '';
-            document.getElementById('result').appendChild(iframe);
+            var notebookUrl = 'https://colab.research.google.com/drive/your_notebook_id'; // Hier Ihre Colab-Notebook-ID einfügen
+            window.open(notebookUrl + '?stock_name=' + symbol, '_blank');
         }
     </script>
 </body>
