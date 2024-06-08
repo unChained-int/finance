@@ -1,15 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finance Project</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Aktienprognosebericht</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .report {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Finance Project</h1>
-    <p>This project provides various financial analysis and tools.</p>
-    <p>Explore the features and functionalities through the Google Colab notebook:</p>
-    <a href="https://colab.research.google.com/github/unChained-int/finance/blob/main/notebook.ipynb">Open in Colab</a>
+    <div class="container">
+        <h1>Aktienprognosebericht</h1>
+        <form id="stockForm">
+            <label for="stockSymbol">Aktien-Symbol eingeben:</label>
+            <input type="text" id="stockSymbol" name="stockSymbol" required>
+            <button type="submit" class="button">Prognosebericht erstellen</button>
+        </form>
+        <div id="reportSection" class="report">
+            <h2>Prognosebericht</h2>
+            <div id="reportContent"></div>
+            <a id="downloadLink" class="button" style="display: none;">PDF herunterladen</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('stockForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const stockSymbol = document.getElementById('stockSymbol').value;
+            fetchReport(stockSymbol);
+        });
+
+        async function fetchReport(stockSymbol) {
+            try {
+                const response = await fetch(`http://localhost:8000/analyze/${stockSymbol}`);
+                const data = await response.json();
+                document.getElementById('reportContent').innerText = data.summary;
+                const downloadLink = document.getElementById('downloadLink');
+                downloadLink.href = `http://localhost:8000/download/${stockSymbol}`;
+                downloadLink.style.display = 'inline-block';
+            } catch (error) {
+                console.error('Fehler beim Abrufen des Berichts:', error);
+            }
+        }
+    </script>
 </body>
 </html>
