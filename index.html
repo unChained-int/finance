@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UnChained International - Aktienprognose</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Stil anpassen -->
     <style>
         /* Globale Stile */
         body {
@@ -96,10 +95,12 @@
             background-color: #007bff; /* Hintergrundfarbe der Aktienkurse */
             color: white; /* Textfarbe der Aktienkurse */
             padding: 20px; /* Padding für den Abschnitt mit den Aktienkursen */
+            overflow: hidden; /* Verhindert das Ausbrechen von Inhalten */
         }
 
         .stock-prices table {
-            width: 100%;
+            width: 200%; /* Verdoppelt die Breite, um den Effekt eines Fließbandes zu erzielen */
+            animation: marquee 20s linear infinite; /* Animation für das Fließband */
             border-collapse: collapse;
         }
 
@@ -115,6 +116,16 @@
 
         .stock-prices tr:hover {
             background-color: #f2f2f2;
+        }
+
+        /* Animation für das Fließband */
+        @keyframes marquee {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-50%); /* Bewegt die Tabelle um die Hälfte der Breite nach links */
+            }
         }
     </style>
 </head>
@@ -141,9 +152,8 @@
             </div>
         </section>
 
-        <!-- Live-Aktienkurse einfügen -->
+        <!-- Aktienkurse als Fließband -->
         <section class="stock-prices">
-            <h2>Aktuelle Aktienkurse</h2>
             <table>
                 <thead>
                     <tr>
@@ -151,7 +161,9 @@
                         <th>Preis</th>
                     </tr>
                 </thead>
-                <tbody id="stock-data"></tbody>
+                <tbody id="stock-data">
+                    <!-- Die Aktienkurse werden dynamisch hinzugefügt -->
+                </tbody>
             </table>
         </section>
     </main>
@@ -168,37 +180,37 @@
             // API-Schlüssel
             var apiKey = "DXP4A4ZA9XUU1MYG";
             // Symbole für Aktien
-            var symbols = ["AAPL", "TSLA", "MSFT", "GOOGL"]; // Beispiel-Symbole
-            var apiUrl = "https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=" + symbols.join(",") + "&apikey=" + apiKey;
+            var symbols = ["AAPL", "TSLA", "GOOGL", "MSFT", "^GDAX"]; // Fügen Sie weitere Symbole hinzu, falls gewünscht
+            // Basis-URL für die API-Anfrage
+            var baseUrl = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&apikey=" + apiKey + "&symbol=";
+            // Container für Aktienkurse
+            var stockDataContainer = document.getElementById("stock-data");
 
-            // AJAX-Anfrage zum Abrufen der Daten
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", apiUrl, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    var stockData = JSON.parse(xhr.responseText);
-                    displayStockPrices(stockData);
-                }
-            };
-            xhr.send();
-        }
+            // Schleife durch die Symbole und Abruf der Aktienkurse
+            symbols.forEach(function(symbol) {
+                // Erstellen der vollständigen API-URL für jede Aktie
+                var apiUrl = baseUrl + symbol;
 
-        // Funktion zum Anzeigen der Aktienkurse auf der Seite
-        function displayStockPrices(stockData) {
-            var stockTable = document.getElementById("stock-data");
-            var stocks = stockData["Stock Quotes"];
-            stocks.forEach(function(stock) {
-                var symbol = stock["1. symbol"];
-                var price = stock["2. price"];
-                var row = "<tr><td>" + symbol + "</td><td>" + price + "</td></tr>";
-                stockTable.innerHTML += row;
+                // API-Anfrage durchführen
+                fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    // Extrahieren des aktuellen Preises aus der API-Antwort
+                    var price = data["Global Quote"]["05. price"];
+                    
+                    // Erstellen einer Zeile für die Tabelle mit dem Symbol und dem Preis
+                    var newRow = document.createElement("tr");
+                    newRow.innerHTML = "<td>" + symbol + "</td><td>" + price + "</td>";
+                    
+                    // Hinzufügen der Zeile zum Container für Aktienkurse
+                    stockDataContainer.appendChild(newRow);
+                })
+                .catch(error => console.error("Fehler beim Abrufen der Aktienkurse: ", error));
             });
         }
 
-        // Aktienkurse beim Laden der Seite abrufen
-        window.onload = function() {
-            getStockPrices();
-        };
+        // Aktienkurse abrufen, wenn die Seite geladen wird
+        window.onload = getStockPrices;
     </script>
 </body>
 </html>
