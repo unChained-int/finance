@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UnChained International - Aktienprognose</title>
+    <title>UnChained International - Hugging Face Aktienanalyse</title>
     <style>
         /* Globale Stile */
         body {
@@ -146,13 +146,14 @@
     <main>
         <section class="hero">
             <div class="container">
-                <h2>Hugging Face</h2>
+                <h2>Hugging Face Aktienanalyse</h2>
                 <p>Erhalten Sie Vorhersagen für Aktien mit unserem AI-Modell von Hugging Face.</p>
-                <form id="stock-form">
-                    <label for="stock-input">Aktienname:</label>
-                    <input type="text" id="stock-input" name="stock" required>
-                    <button type="submit" class="btn">Prognose erhalten</button>
-                </form>
+                <iframe
+                    src="https://maus2017-unchained-int.hf.space"
+                    frameborder="0"
+                    width="850"
+                    height="450"
+                ></iframe>
             </div>
         </section>
 
@@ -177,14 +178,14 @@
         </div>
     </footer>
 
-    <!-- JavaScript zur Abrufung der Aktienkurse und des Hugging Face Modells -->
+    <!-- JavaScript zur Abrufung der Aktienkurse -->
     <script>
         // Funktion zum Abrufen der Aktienkurse von Alpha Vantage
         function getStockPrices() {
             // API-Schlüssel
             var apiKey = "DXP4A4ZA9XUU1MYG";
             // Symbole für Aktien
-            var symbols = ["AAPL", "TSLA", "GOOGL"]; // Fügen Sie weitere Symbole hinzu, falls gewünscht
+            var symbols = ["AAPL", "TSLA", "GOOGL", "MSFT", "^GDAX"]; // Fügen Sie weitere Symbole hinzu, falls gewünscht
             // Basis-URL für die API-Anfrage
             var baseUrl = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&apikey=" + apiKey + "&symbol=";
             // Container für Aktienkurse
@@ -213,36 +214,8 @@
             });
         }
 
-        // Funktion zum Abrufen von Vorhersagen vom Hugging Face Modell
-        async function getStockPrediction(stockName) {
-            try {
-                const client = await window.Client.connect("maus2017/unchained-int");
-                const result = await client.predict("/predict", { stock_name: stockName });
-                return result.data;
-            } catch (error) {
-                console.error("Fehler beim Abrufen der Vorhersage: ", error);
-                return null;
-            }
-        }
-
-        // Funktion zum Verarbeiten des Formulars
-        document.getElementById("stock-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            var stockName = document.getElementById("stock-input").value;
-            getStockPrediction(stockName).then(prediction => {
-                if (prediction) {
-                    console.log("Vorhersage für", stockName, ":", prediction);
-                    // Hier können Sie die Vorhersage weiterverarbeiten, z.B. anzeigen
-                } else {
-                    console.log("Keine Vorhersage für", stockName, "verfügbar.");
-                    // Hier können Sie eine Meldung anzeigen, dass keine Vorhersage verfügbar ist
-                }
-            });
-        });
-
         // Aktienkurse abrufen, wenn die Seite geladen wird
         window.onload = getStockPrices;
     </script>
-    <script src="https://unpkg.com/@gradio/client"></script> <!-- Hugging Face Client -->
 </body>
 </html>
