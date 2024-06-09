@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="UnChained International bietet fundierte Aktienprognosen und Finanzanalysen für internationale Märkte.">
     <title>UnChained International - Aktienprognose</title>
     <link rel="stylesheet" href="styles.css"> <!-- Stil anpassen -->
     <style>
+        /* Globale Stile */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f8f9fa; /* Hintergrundfarbe */
+            color: #343a40; /* Textfarbe */
+        }
+
         /* Stile für den Header */
         header {
             background-color: #007bff; /* Blau */
@@ -30,19 +39,31 @@
             text-decoration: none;
         }
 
+        /* Stile für den Hauptinhalt */
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px 0;
+        }
+
+        h1, h2, h3 {
+            margin: 0;
+            font-weight: normal;
+        }
+
         /* Stile für den Hero-Bereich */
         .hero {
-            background-color: #f8f9fa; /* Hellgrau */
-            padding: 50px 0;
             text-align: center;
+            padding: 50px 0;
         }
 
         .hero h2 {
-            color: #343a40; /* Dunkelgrau */
+            font-size: 2.5rem;
+            margin-bottom: 20px;
         }
 
         .hero p {
-            color: #6c757d; /* Grau */
+            font-size: 1.2rem;
             margin-bottom: 30px;
         }
 
@@ -53,13 +74,45 @@
             border: none;
             border-radius: 5px;
             text-decoration: none;
+            transition: background-color 0.3s;
         }
 
         .btn:hover {
             background-color: #0056b3; /* Dunkleres Blau */
         }
 
-        /* Weitere Stile für den Rest der Seite... */
+        /* Stile für den Footer */
+        footer {
+            background-color: #343a40; /* Dunkelgrau */
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        /* Stile für die Aktienkurse */
+        .stock-prices {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .stock-prices table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .stock-prices th, .stock-prices td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .stock-prices th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .stock-prices tr:hover {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
@@ -84,12 +137,61 @@
                 <a href="#" class="btn">Mehr erfahren</a>
             </div>
         </section>
-        <!-- Weitere Abschnitte und Inhalte... -->
+
+        <!-- Live-Aktienkurse einfügen -->
+        <section class="stock-prices">
+            <h2>Aktuelle Aktienkurse</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Preis</th>
+                    </tr>
+                </thead>
+                <tbody id="stock-data">
+                    <!-- Hier werden die Aktienkurse eingefügt -->
+                </tbody>
+            </table>
+        </section>
     </main>
     <footer>
         <div class="container">
             <p>&copy; 2024 UnChained International. Alle Rechte vorbehalten.</p>
         </div>
     </footer>
+
+    <!-- JavaScript zur Abrufung der Aktienkurse -->
+    <script>
+        // Funktion zum Abrufen der Aktienkurse von Alpha Vantage
+        function getStockPrices() {
+            // Beispiel-URL für Alpha Vantage API (ersetze API_KEY durch deine eigene API-Schlüssel)
+            var apiUrl = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=DAX&apikey=DXP4A4ZA9XUU1MYG";
+
+            // AJAX-Anfrage zum Abrufen der Daten
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", apiUrl, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var stockData = JSON.parse(xhr.responseText);
+                    displayStockPrices(stockData);
+                }
+            };
+            xhr.send();
+        }
+
+        // Funktion zum Anzeigen der Aktienkurse auf der Seite
+        function displayStockPrices(stockData) {
+            var stockTable = document.getElementById("stock-data");
+            var symbol = stockData["Global Quote"]["01. symbol"];
+            var price = stockData["Global Quote"]["05. price"];
+            var row = "<tr><td>" + symbol + "</td><td>" + price + "</td></tr>";
+            stockTable.innerHTML = row;
+        }
+
+        // Aktienkurse beim Laden der Seite abrufen
+        window.onload = function() {
+            getStockPrices();
+        };
+    </script>
 </body>
 </html>
