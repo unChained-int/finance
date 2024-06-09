@@ -93,6 +93,8 @@
         .stock-prices {
             text-align: center;
             margin-top: 20px;
+            background-color: #DXP4A4ZA9XUU1MYG; /* Hintergrundfarbe der Aktienkurse */
+            color: white; /* Textfarbe der Aktienkurse */
         }
 
         .stock-prices table {
@@ -106,7 +108,7 @@
         }
 
         .stock-prices th {
-            background-color: #007bff;
+            background-color: #007bff; /* Blau */
             color: white;
         }
 
@@ -148,9 +150,7 @@
                         <th>Preis</th>
                     </tr>
                 </thead>
-                <tbody id="stock-data">
-                    <!-- Hier werden die Aktienkurse eingefügt -->
-                </tbody>
+                <tbody id="stock-data"></tbody>
             </table>
         </section>
     </main>
@@ -164,8 +164,10 @@
     <script>
         // Funktion zum Abrufen der Aktienkurse von Alpha Vantage
         function getStockPrices() {
+            // API-Schlüssel
+            var apiKey = "DXP4A4ZA9XUU1MYG";
             // Beispiel-URL für Alpha Vantage API (ersetze API_KEY durch deine eigene API-Schlüssel)
-            var apiUrl = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=DAX&apikey=DXP4A4ZA9XUU1MYG";
+            var apiUrl = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=DAX&apikey=" + apiKey;
 
             // AJAX-Anfrage zum Abrufen der Daten
             var xhr = new XMLHttpRequest();
