@@ -11,8 +11,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            background-color: #f8f9fa; /* Hintergrundfarbe */
-            color: #343a40; /* Textfarbe */
+            background-color: #f0f2f5; /* Hintergrundfarbe */
+            color: #333; /* Textfarbe */
         }
 
         /* Stile für den Header */
@@ -92,7 +92,7 @@
         .stock-prices {
             text-align: center;
             margin-top: 20px;
-            background-color: #007bff; /* Hintergrundfarbe der Aktienkurse */
+            background-color: #0056b3; /* Hintergrundfarbe der Aktienkurse */
             color: white; /* Textfarbe der Aktienkurse */
             padding: 20px; /* Padding für den Abschnitt mit den Aktienkursen */
             overflow: hidden; /* Verhindert das Ausbrechen von Inhalten */
@@ -110,12 +110,12 @@
         }
 
         .stock-prices th {
-            background-color: #0056b3; /* Dunkleres Blau */
+            background-color: #003f7f; /* Dunkleres Blau */
             color: white;
         }
 
         .stock-prices tr:hover {
-            background-color: #f2f2f2;
+            background-color: #004080; /* Dunkles Blau */
         }
 
         /* Animation für das Fließband */
@@ -180,7 +180,7 @@
             // API-Schlüssel
             var apiKey = "DXP4A4ZA9XUU1MYG";
             // Symbole für Aktien
-            var symbols = ["AAPL", "TSLA", "GOOGL", "MSFT", "^GDAX"]; // Fügen Sie weitere Symbole hinzu, falls gewünscht
+            var symbols = ["AAPL", "TSLA", "GOOGL"]; // Fügen Sie weitere Symbole hinzu, falls gewünscht
             // Basis-URL für die API-Anfrage
             var baseUrl = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&apikey=" + apiKey + "&symbol=";
             // Container für Aktienkurse
