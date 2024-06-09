@@ -96,35 +96,31 @@
             color: white; /* Textfarbe der Aktienkurse */
             padding: 20px; /* Padding für den Abschnitt mit den Aktienkursen */
             overflow: hidden; /* Verhindert das Ausbrechen von Inhalten */
+            white-space: nowrap; /* Verhindert das Umbruch von Text */
+            position: relative; /* Positionierung relativ zum Container */
         }
 
-        .stock-prices table {
-            width: 200%; /* Verdoppelt die Breite, um den Effekt eines Fließbandes zu erzielen */
-            animation: marquee 20s linear infinite; /* Animation für das Fließband */
-            border-collapse: collapse;
+        .stock-list {
+            position: absolute; /* Absolute Positionierung */
+            top: 50%; /* Vertikal zentrieren */
+            left: 100%; /* Startposition rechts vom Container */
+            animation: marquee 20s linear infinite; /* Animation für das Laufen */
+            padding-left: 10px; /* Zusätzlicher Abstand zum Container */
+            transform: translateY(-50%); /* Vertikal zentrieren */
         }
 
-        .stock-prices th, .stock-prices td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+        .stock-item {
+            display: inline-block; /* Aktien nebeneinander anzeigen */
+            margin-right: 20px; /* Abstand zwischen den Aktien */
         }
 
-        .stock-prices th {
-            background-color: #003f7f; /* Dunkleres Blau */
-            color: white;
-        }
-
-        .stock-prices tr:hover {
-            background-color: #004080; /* Dunkles Blau */
-        }
-
-        /* Animation für das Fließband */
+        /* Animation für das Laufen */
         @keyframes marquee {
             0% {
                 transform: translateX(0%);
             }
             100% {
-                transform: translateX(-50%); /* Bewegt die Tabelle um die Hälfte der Breite nach links */
+                transform: translateX(-100%);
             }
         }
     </style>
@@ -148,28 +144,19 @@
             <div class="container">
                 <h2>Hugging Face Aktienanalyse</h2>
                 <p>Erhalten Sie Vorhersagen für Aktien mit unserem AI-Modell von Hugging Face.</p>
-                <iframe
-                    src="https://maus2017-unchained-int.hf.space"
-                    frameborder="0"
-                    width="850"
-                    height="450"
-                ></iframe>
+                <form id="stock-form">
+                    <label for="stock-input">Aktienname:</label>
+                    <input type="text" id="stock-input" name="stock" required>
+                    <button type="submit" class="btn">Prognose erhalten</button>
+                </form>
             </div>
         </section>
 
-        <!-- Aktienkurse als Fließband -->
+        <!-- Aktienkurse als Seitlich laufende Liste -->
         <section class="stock-prices">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Symbol</th>
-                        <th>Preis</th>
-                    </tr>
-                </thead>
-                <tbody id="stock-data">
-                    <!-- Die Aktienkurse werden dynamisch hinzugefügt -->
-                </tbody>
-            </table>
+            <div class="stock-list">
+                <!-- Aktienkurse werden dynamisch hinzugefügt -->
+            </div>
         </section>
     </main>
     <footer>
@@ -178,18 +165,18 @@
         </div>
     </footer>
 
-    <!-- JavaScript zur Abrufung der Aktienkurse -->
+    <!-- JavaScript zur Abrufung der Aktienkurse und des Hugging Face Modells -->
     <script>
         // Funktion zum Abrufen der Aktienkurse von Alpha Vantage
         function getStockPrices() {
             // API-Schlüssel
             var apiKey = "DXP4A4ZA9XUU1MYG";
             // Symbole für Aktien
-            var symbols = ["AAPL", "TSLA", "GOOGL", "MSFT", "^GDAX"]; // Fügen Sie weitere Symbole hinzu, falls gewünscht
+            var symbols = ["AAPL", "TSLA", "GOOGL"]; // Fügen Sie weitere Symbole hinzu, falls gewünscht
             // Basis-URL für die API-Anfrage
             var baseUrl = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&apikey=" + apiKey + "&symbol=";
             // Container für Aktienkurse
-            var stockDataContainer = document.getElementById("stock-data");
+            var stockListContainer = document.querySelector(".stock-list");
 
             // Schleife durch die Symbole und Abruf der Aktienkurse
             symbols.forEach(function(symbol) {
@@ -203,19 +190,57 @@
                     // Extrahieren des aktuellen Preises aus der API-Antwort
                     var price = data["Global Quote"]["05. price"];
                     
-                    // Erstellen einer Zeile für die Tabelle mit dem Symbol und dem Preis
-                    var newRow = document.createElement("tr");
-                    newRow.innerHTML = "<td>" + symbol + "</td><td>" + price + "</td>";
+                    // Erstellen eines Elements für die Aktie mit Symbol und Preis
+                    var stockItem = document.createElement("div");
+                    stockItem.classList.add("stock-item");
+                    stockItem.textContent = symbol + ": $" + price;
                     
-                    // Hinzufügen der Zeile zum Container für Aktienkurse
-                    stockDataContainer.appendChild(newRow);
+                    // Hinzufügen des Aktienelements zur Liste
+                    stockListContainer.appendChild(stockItem);
                 })
                 .catch(error => console.error("Fehler beim Abrufen der Aktienkurse: ", error));
             });
         }
 
+        // Funktion zum Abrufen von Vorhersagen vom Hugging Face Modell
+        async function getStockPrediction(stockName) {
+            try {
+                const client = await window.Client.connect("maus2017/unchained-int");
+                const result = await client.predict("/predict", { stock_name: stockName });
+                return result.data;
+            } catch (error) {
+                console.error("Fehler beim Abrufen der Vorhersage: ", error);
+                return null;
+            }
+        }
+
+        // Funktion zum Verarbeiten des Formulars
+        document.getElementById("stock-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var stockName = document.getElementById("stock-input").value;
+            getStockPrediction(stockName).then(prediction => {
+                if (prediction) {
+                    console.log("Vorhersage für", stockName, ":", prediction);
+                    // Hier können Sie die Vorhersage weiterverarbeiten, z.B. anzeigen
+                    // Erstellung des Prognoseberichts
+                    var reportContent = "Aktie: " + stockName + "\n";
+                    reportContent += "Prognose: " + prediction + "\n";
+                    var reportBlob = new Blob([reportContent], { type: "text/plain" });
+                    var reportUrl = URL.createObjectURL(reportBlob);
+                    var downloadLink = document.createElement("a");
+                    downloadLink.href = reportUrl;
+                    downloadLink.download = "Prognosebericht.txt";
+                    downloadLink.click();
+                } else {
+                    console.log("Keine Vorhersage für", stockName, "verfügbar.");
+                    // Hier können Sie eine Meldung anzeigen, dass keine Vorhersage verfügbar ist
+                }
+            });
+        });
+
         // Aktienkurse abrufen, wenn die Seite geladen wird
         window.onload = getStockPrices;
     </script>
+    <script src="https://unpkg.com/@gradio/client"></script> <!-- Hugging Face Client -->
 </body>
 </html>
