@@ -123,9 +123,29 @@
                 transform: translateX(-100%);
             }
         }
+
+        /* Stile für den schwarzen Bildschirm */
+        .black-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Stellen Sie sicher, dass es über allen anderen Elementen liegt */
+            color: white;
+            font-size: 2rem;
+        }
     </style>
 </head>
 <body>
+    <div class="black-screen">
+        <span>UnChained</span>
+    </div>
+
     <header>
         <div class="container">
             <h1>UnChained International</h1>
@@ -224,23 +244,32 @@
                     // Hier können Sie die Vorhersage weiterverarbeiten, z.B. anzeigen
                     // Erstellung des Prognoseberichts
                     var reportContent = "Aktie: " + stockName + "\n";
-                    reportContent += "Prognose: " + prediction + "\n";
-                    var reportBlob = new Blob([reportContent], { type: "text/plain" });
-                    var reportUrl = URL.createObjectURL(reportBlob);
-                    var downloadLink = document.createElement("a");
-                    downloadLink.href = reportUrl;
-                    downloadLink.download = "Prognosebericht.txt";
-                    downloadLink.click();
-                } else {
-                    console.log("Keine Vorhersage für", stockName, "verfügbar.");
-                    // Hier können Sie eine Meldung anzeigen, dass keine Vorhersage verfügbar ist
+                    // Fügen Sie hier die Variablen für den Prognosebericht ein
+                    // Verwenden Sie prediction und andere Daten, um den Bericht zu erstellen
+                    // Beispiel: reportContent += "Prognose: " + prediction + "\n";
+                    // Hier können Sie den Bericht generieren und herunterladen
+                    generateReportAndDownload(reportContent);
                 }
             });
         });
 
-        // Aktienkurse abrufen, wenn die Seite geladen wird
-        window.onload = getStockPrices;
+        // Funktion zum Generieren und Herunterladen des Prognoseberichts
+        function generateReportAndDownload(reportContent) {
+            // Mockup für den Bericht, Sie müssen die Funktion create_forecast_report entsprechend implementieren
+            console.log("Prognosebericht generiert:", reportContent);
+            // Mockup für den Herunterladen, Sie müssen den Bericht entsprechend herunterladen
+            console.log("Prognosebericht heruntergeladen.");
+        }
+
+        // Aktualisieren der Aktienkurse alle 30 Sekunden
+        setInterval(getStockPrices, 30000);
+        // Aktualisieren der Aktienkurse beim Laden der Seite
+        getStockPrices();
+
+        // Verzögerung zum Ausblenden des schwarzen Bildschirms nach 2 Sekunden
+        setTimeout(function() {
+            document.querySelector(".black-screen").style.display = "none";
+        }, 2000);
     </script>
-    <script src="https://unpkg.com/@gradio/client"></script> <!-- Hugging Face Client -->
 </body>
 </html>
