@@ -1,25 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aktienanalyse</title>
+    <title>Stock Forecast Web App</title>
+    <!-- Hier kannst du CSS-Dateien einbinden, um das Aussehen der Seite anzupassen -->
+    <!-- Beispiel: <link rel="stylesheet" href="styles.css"> -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Aktienanalyse</h1>
-    <form id="stockForm">
-        <label for="stockSymbol">Aktiensymbol:</label>
-        <input type="text" id="stockSymbol" name="stockSymbol" required>
-        <button type="button" onclick="runAnalysis()">Analysieren</button>
-    </form>
-    <div id="result"></div>
 
-    <script>
-        function runAnalysis() {
-            var symbol = document.getElementById('stockSymbol').value;
-            var notebookUrl = 'https://colab.research.google.com/drive/1yhpF6zy1O_YQ8mQ1Y10Wu8h7O1yrwH_2?usp=sharing'; // Hier Ihre Colab-Notebook-ID einfügen
-            window.open(notebookUrl + '?stock_name=' + symbol, '_blank');
-        }
-    </script>
+<header>
+    <h1>Stock Forecast Web App</h1>
+</header>
+
+<!-- Hier wird das Gradio-Interface über einen iframe eingebunden -->
+<iframe src="https://huggingface.co/spaces/maus2017/unchained-int" frameborder="0"></iframe>
+
+<!-- Hier kannst du JavaScript-Dateien einbinden, um das Verhalten der Seite anzupassen -->
+<!-- Beispiel: <script src="script.js"></script> -->
+
+
 </body>
 </html>
