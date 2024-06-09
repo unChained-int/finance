@@ -93,8 +93,9 @@
         .stock-prices {
             text-align: center;
             margin-top: 20px;
-            background-color: #DXP4A4ZA9XUU1MYG; /* Hintergrundfarbe der Aktienkurse */
+            background-color: #007bff; /* Hintergrundfarbe der Aktienkurse */
             color: white; /* Textfarbe der Aktienkurse */
+            padding: 20px; /* Padding für den Abschnitt mit den Aktienkursen */
         }
 
         .stock-prices table {
@@ -108,7 +109,7 @@
         }
 
         .stock-prices th {
-            background-color: #007bff; /* Blau */
+            background-color: #0056b3; /* Dunkleres Blau */
             color: white;
         }
 
@@ -166,8 +167,9 @@
         function getStockPrices() {
             // API-Schlüssel
             var apiKey = "DXP4A4ZA9XUU1MYG";
-            // Beispiel-URL für Alpha Vantage API (ersetze API_KEY durch deine eigene API-Schlüssel)
-            var apiUrl = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=DAX&apikey=" + apiKey;
+            // Symbole für Aktien
+            var symbols = ["AAPL", "TSLA", "MSFT", "GOOGL"]; // Beispiel-Symbole
+            var apiUrl = "https://www.alphavantage.co/query?function=BATCH_STOCK_QUOTES&symbols=" + symbols.join(",") + "&apikey=" + apiKey;
 
             // AJAX-Anfrage zum Abrufen der Daten
             var xhr = new XMLHttpRequest();
@@ -184,10 +186,13 @@
         // Funktion zum Anzeigen der Aktienkurse auf der Seite
         function displayStockPrices(stockData) {
             var stockTable = document.getElementById("stock-data");
-            var symbol = stockData["Global Quote"]["01. symbol"];
-            var price = stockData["Global Quote"]["05. price"];
-            var row = "<tr><td>" + symbol + "</td><td>" + price + "</td></tr>";
-            stockTable.innerHTML = row;
+            var stocks = stockData["Stock Quotes"];
+            stocks.forEach(function(stock) {
+                var symbol = stock["1. symbol"];
+                var price = stock["2. price"];
+                var row = "<tr><td>" + symbol + "</td><td>" + price + "</td></tr>";
+                stockTable.innerHTML += row;
+            });
         }
 
         // Aktienkurse beim Laden der Seite abrufen
