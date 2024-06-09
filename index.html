@@ -148,7 +148,11 @@
             <div class="container">
                 <h2>Aktienprognose für das zweite Halbjahr 2024</h2>
                 <p>Unsere Experten haben sorgfältige Analysen durchgeführt und bieten Ihnen einen Einblick in die vielversprechendsten Aktien für das zweite Halbjahr 2024. Erfahren Sie mehr über unsere Prognosen und treffen Sie fundierte Investitionsentscheidungen.</p>
-                <a href="#" class="btn">Mehr erfahren</a>
+                <form id="stock-form">
+                    <label for="stock-input">Aktienname:</label>
+                    <input type="text" id="stock-input" name="stock" required>
+                    <button type="submit" class="btn">Prognose erhalten</button>
+                </form>
             </div>
         </section>
 
@@ -221,13 +225,23 @@
             }
         }
 
-        // Aktienkurse und Hugging Face Modell abrufen, wenn die Seite geladen wird
-        window.onload = function() {
-            getStockPrices();
-            // Beispielaufruf für das Hugging Face Modell (Sie können dies anpassen)
-            var stockName = "AAPL"; // Beispielaktie
-            getStockPrediction(stockName).then(prediction => console.log("Vorhersage für", stockName, ":", prediction));
-        };
+        // Funktion zum Verarbeiten des Formulars
+        document.getElementById("stock-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var stockName = document.getElementById("stock-input").value;
+            getStockPrediction(stockName).then(prediction => {
+                if (prediction) {
+                    console.log("Vorhersage für", stockName, ":", prediction);
+                    // Hier können Sie die Vorhersage weiterverarbeiten, z.B. anzeigen
+                } else {
+                    console.log("Keine Vorhersage für", stockName, "verfügbar.");
+                    // Hier können Sie eine Meldung anzeigen, dass keine Vorhersage verfügbar ist
+                }
+            });
+        });
+
+        // Aktienkurse abrufen, wenn die Seite geladen wird
+        window.onload = getStockPrices;
     </script>
     <script src="https://unpkg.com/@gradio/client"></script> <!-- Hugging Face Client -->
 </body>
