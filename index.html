@@ -1,28 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unchained International</title>
+    <meta name="description" content="UnChained International bietet fundierte Aktienprognosen und Finanzanalysen für internationale Märkte.">
+    <title>UnChained International - Aktienprognose</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Stil anpassen -->
 </head>
 <body>
-    <h1>Unchained International</h1>
-    <form id="stockForm">
-        <label for="stockName">Aktienname:</label>
-        <input type="text" id="stockName" name="stockName" required>
-        <button type="button" onclick="getStockPrediction()">Prognose erstellen</button>
-    </form>
-    
-    <!-- Hier werden die Ergebnisse angezeigt -->
-    <div id="result"></div>
-
-    <script>
-        async function getStockPrediction() {
-            const stockName = document.getElementById("stockName").value;
-            const response = await fetch(`https://api-inference.huggingface.co/models/maus2017/unchained-int?stock_name=${stockName}`);
-            const data = await response.json();
-            document.getElementById("result").innerText = JSON.stringify(data);
-        }
-    </script>
+    <header>
+        <div class="container">
+            <h1>UnChained International</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">Startseite</a></li>
+                    <li><a href="#">Über uns</a></li>
+                    <li><a href="#">Aktienprognosen</a></li>
+                    <li><a href="#">Kontakt</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>Aktienprognose für das zweite Halbjahr 2024</h2>
+                <p>Unsere Experten haben sorgfältige Analysen durchgeführt und bieten Ihnen einen Einblick in die vielversprechendsten Aktien für das zweite Halbjahr 2024. Erfahren Sie mehr über unsere Prognosen und treffen Sie fundierte Investitionsentscheidungen.</p>
+                <a href="#" class="btn">Mehr erfahren</a>
+            </div>
+        </section>
+        <section class="about">
+            <div class="container">
+                <h2>Über UnChained International</h2>
+                <p>UnChained International ist eine führende Finanzanalysefirma, die sich auf Aktienprognosen und Investitionsstrategien spezialisiert hat. Unser engagiertes Team von Analysten liefert hochwertige Finanzberatung für globale Märkte.</p>
+            </div>
+        </section>
+        <section class="services">
+            <div class="container">
+                <h2>Unsere Dienstleistungen</h2>
+                <ul>
+                    <li>Aktienprognosen</li>
+                    <li>Finanzanalysen</li>
+                    <li>Investitionsberatung</li>
+                    <li>Marktforschung</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 UnChained International. Alle Rechte vorbehalten.</p>
+        </div>
+    </footer>
 </body>
 </html>
