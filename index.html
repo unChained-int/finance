@@ -173,7 +173,7 @@
         </div>
     </footer>
 
-    <!-- JavaScript zur Abrufung der Aktienkurse -->
+    <!-- JavaScript zur Abrufung der Aktienkurse und des Hugging Face Modells -->
     <script>
         // Funktion zum Abrufen der Aktienkurse von Alpha Vantage
         function getStockPrices() {
@@ -209,8 +209,26 @@
             });
         }
 
-        // Aktienkurse abrufen, wenn die Seite geladen wird
-        window.onload = getStockPrices;
+        // Funktion zum Abrufen von Vorhersagen vom Hugging Face Modell
+        async function getStockPrediction(stockName) {
+            try {
+                const client = await window.Client.connect("maus2017/unchained-int");
+                const result = await client.predict("/predict", { stock_name: stockName });
+                return result.data;
+            } catch (error) {
+                console.error("Fehler beim Abrufen der Vorhersage: ", error);
+                return null;
+            }
+        }
+
+        // Aktienkurse und Hugging Face Modell abrufen, wenn die Seite geladen wird
+        window.onload = function() {
+            getStockPrices();
+            // Beispielaufruf für das Hugging Face Modell (Sie können dies anpassen)
+            var stockName = "AAPL"; // Beispielaktie
+            getStockPrediction(stockName).then(prediction => console.log("Vorhersage für", stockName, ":", prediction));
+        };
     </script>
+    <script src="https://unpkg.com/@gradio/client"></script> <!-- Hugging Face Client -->
 </body>
 </html>
