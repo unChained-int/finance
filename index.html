@@ -15,6 +15,27 @@
             color: white; /* Weißer Text */
         }
 
+        /* Stile für das schwarze Display */
+        .black-display {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: black;
+            z-index: 9999;
+        }
+
+        /* Stile für den UnChained Schriftzug */
+        .unchained-text {
+            font-size: 48px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
         /* Stile für den Header */
         header {
             background-color: #007bff; /* Blau */
@@ -130,6 +151,12 @@
     </style>
 </head>
 <body>
+    <!-- Schwarzes Display mit UnChained Schriftzug -->
+    <div class="black-display" id="black-display">
+        <div class="unchained-text">UnChained</div>
+    </div>
+
+    <!-- Restlicher Inhalt -->
     <header>
         <div class="container">
             <h1>UnChained International</h1>
@@ -215,7 +242,13 @@
         }
 
         // Aktienkurse abrufen, wenn die Seite geladen wird
-        window.onload = getStockPrices;
+        window.onload = function() {
+            // Verzögerung für das Schwarze Display mit UnChained Logo
+            setTimeout(function() {
+                document.getElementById("black-display").style.display = "none";
+                getStockPrices();
+            }, 2000); // 2 Sekunden Verzögerung
+        };
     </script>
 </body>
 </html>
