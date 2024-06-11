@@ -79,15 +79,15 @@
             <div id="login-form" class="u-expanded-width u-form u-login-control u-form-1">
                 <form action="#" method="POST" class="u-clearfix u-form-custom-backend u-form-spacing-10 u-inner-form" style="padding: 10px;">
                     <div class="u-form-group u-form-name">
-                        <label for="username" class="u-label">Benutzername</label>
+                        <label for="username" class="u-label u-text-body-alt-color">Benutzername</label>
                         <input type="text" placeholder="Benutzername eingeben" id="username" name="username" class="u-input u-input-rectangle" required>
                     </div>
                     <div class="u-form-group u-form-password">
-                        <label for="password" class="u-label">Passwort</label>
+                        <label for="password" class="u-label u-text-body-alt-color">Passwort</label>
                         <input type="password" placeholder="Passwort eingeben" id="password" name="password" class="u-input u-input-rectangle" required>
                     </div>
                     <div class="u-align-center u-form-group u-form-submit">
-                        <button type="submit" class="u-btn u-btn-submit u-button-style">Anmelden</button>
+                        <button type="submit" class="u-border-none u-btn u-btn-submit u-button-style u-palette-2-base u-btn-1">Anmelden</button>
                     </div>
                 </form>
             </div>
@@ -113,7 +113,7 @@
                 document.getElementById('login-form').style.display = 'none';
                 document.getElementById('gradio-content').style.display = 'block';
             } else {
-                alert('Falscher Benutzername oder Passwort!');
+                alert('Falscher Benutzername oder Passwort.');
             }
         });
     </script>
