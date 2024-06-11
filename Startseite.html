@@ -139,5 +139,38 @@
 
       </p>
     </section>
-  
+  <!-- Aktienkurse Sektion -->
+    <section id="stock-prices" class="u-clearfix u-section-3">
+        <div class="u-clearfix u-sheet u-valign-middle u-sheet-1">
+            <h2 class="u-text u-text-default u-text-1">Aktuelle Aktienkurse</h2>
+            <ul id="stocks-list">
+                <!-- Die Aktienkurse werden hier eingefügt -->
+            </ul>
+        </div>
+    </section>
+
+    <!-- JavaScript zum Abrufen der Aktienkurse -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const apiUrl = 'https://api.finanzon.io/v1/quotes?symbol=AAPL,MSFT,GOOGL'; // Beispiel-API-Endpunkt
+            const apiKey = 'a4c8f21cb88b4aab9e921b2b7e45aba0k0'; // Ersetzen Sie 'YOUR_API_KEY' durch Ihren tatsächlichen API-Schlüssel
+
+            fetch(apiUrl, {
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const stocksList = document.getElementById('stocks-list');
+                data.forEach(stock => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${stock.symbol}: ${stock.price}`;
+                    stocksList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Fehler beim Abrufen der Aktienkurse:', error));
+        });
+    </script>
+
 </body></html>
